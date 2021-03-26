@@ -36,8 +36,7 @@ int main() {
 	while (std::getline(file_contents, row_string)) {
 		all_rows.push_back(row_string);
 	}
-	//auto first_half = take_lower_half(row_nums);
-	//auto second_half = take_upper_half(row_nums);
+	int highest_seat_id = 0;
 	for (const auto& row : all_rows) {
 		std::vector<int> row_nums;
 		std::vector<int> column_nums;
@@ -47,7 +46,7 @@ int main() {
 		for (int i = 0; i < 8; i++) {
 			column_nums.push_back(i);
 		}
-		for (const auto& c : "BBFFBBFRLL") { //row
+		for (const auto& c : row) {
 			if (c == 'F') {
 				row_nums = take_lower_half(row_nums);
 			}
@@ -64,7 +63,8 @@ int main() {
 		auto row_number = row_nums[0];
 		auto column_number = column_nums[0];
 		auto seat_id = calculate_seat_id(row_number, column_number);
-		int i = 1;
-		std::cout << row_number << "\n";
+		if (seat_id > highest_seat_id) { highest_seat_id = seat_id; }
+		std::cout << row_number << " " << column_number << " " << seat_id << "\n";
 	}
+	std::cout << "Highest seat ID: " << highest_seat_id;
 }
