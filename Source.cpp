@@ -25,7 +25,7 @@ std::vector<int> take_upper_half(std::vector<int> const& row_numbers) {
 	return new_numbers;
 }
 
-int calculate_seat_id(int row_number, int column_number) {
+int calculate_seat_id(int const& row_number, int const& column_number) {
 	return (row_number * 8) + column_number;
 }
 
