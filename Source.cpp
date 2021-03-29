@@ -1,4 +1,5 @@
 #include <vector>
+#include <set>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -7,21 +8,21 @@ template<typename T>
 std::vector<T> slice(std::vector<T> const& v, int m, int n)
 {
 	auto first = v.cbegin() + m;
-	auto last = v.cbegin() + n + 1;
+	auto last = v.cbegin() + n;
 
 	std::vector<T> vec(first, last);
 	return vec;
 }
 
-std::vector<int> take_lower_half(std :: vector<int> const& row_numbers) {
+std::vector<int> take_lower_half(std::vector<int> const& row_numbers) {
 	auto vector_size = row_numbers.size();
-	std::vector<int> new_numbers = slice(row_numbers, 0, (vector_size / 2) - 1);
+	std::vector<int> new_numbers = slice(row_numbers, 0, (vector_size / 2));
 	return new_numbers;
 }
 
 std::vector<int> take_upper_half(std::vector<int> const& row_numbers) {
 	auto vector_size = row_numbers.size();
-	std::vector<int> new_numbers = slice(row_numbers, vector_size / 2, vector_size - 1);
+	std::vector<int> new_numbers = slice(row_numbers, vector_size / 2, vector_size);
 	return new_numbers;
 }
 
@@ -37,6 +38,8 @@ int main() {
 		all_rows.push_back(row_string);
 	}
 	int highest_seat_id = 0;
+	int lowest_seat_id = 926;
+	std::set<int> seat_ids_seen;
 	for (const auto& row : all_rows) {
 		std::vector<int> row_nums;
 		std::vector<int> column_nums;
@@ -64,7 +67,19 @@ int main() {
 		auto column_number = column_nums[0];
 		auto seat_id = calculate_seat_id(row_number, column_number);
 		if (seat_id > highest_seat_id) { highest_seat_id = seat_id; }
+		if (seat_id < lowest_seat_id) { lowest_seat_id = seat_id; }
+		seat_ids_seen.insert(seat_id);
 		std::cout << row_number << " " << column_number << " " << seat_id << "\n";
 	}
+
+	for (auto id = lowest_seat_id; id != highest_seat_id + 1; ++id)
+	{
+		if (seat_ids_seen.count(id) == 0)
+		{
+			std::cout << "Missing seat ID: " << id << '\n';
+		}
+	}
+
+	std::cout << "Lowest seat ID: " << lowest_seat_id << '\n';
 	std::cout << "Highest seat ID: " << highest_seat_id;
 }
